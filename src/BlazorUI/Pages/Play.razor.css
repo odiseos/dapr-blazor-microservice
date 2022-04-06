@@ -1,0 +1,28 @@
+  /*Board*/
+
+
+  .board {
+    background: black;
+    display: inline-block;
+    border: 5px solid black;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(9, 80px);
+    grid-template-rows: repeat(9, 80px);
+    grid-gap: 5px;
+  }
+
+  .board_next{
+    background: black;
+    display: inline-block;
+    border: 5px solid black;
+  }
+
+  .grid_next {
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(1, 80px);
+    grid-gap: 5px;
+  }

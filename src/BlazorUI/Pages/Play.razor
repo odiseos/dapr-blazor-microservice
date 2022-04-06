@@ -1,0 +1,36 @@
+@page "/play"
+
+<PageTitle>5 in line</PageTitle>
+
+<h1>5 in line</h1>
+
+
+
+<div class="board_next">
+    <div class="grid_next">
+        @for (int i = 0; i < Game.NextBals.Length; i++)
+        {
+            <BlazorUI.Comps.CellNextBall Ball_t="@Game.NextBals[i].Ball"/>
+        }
+    </div>
+</div>
+
+<h4 style="position: absolute; right: 10px; top: 10px; color: red;">@Game.Message</h4>
+<span style="margin-left: 40px; font-size: 40px; font-weight: bold;">Points: @Game.Points</span>
+
+<div style="margin: 10px 0;"></div>
+
+<div class="board">
+    <div class="grid">
+        @for (int i = 0; i < Game.Board_h; i++)
+        {   
+            @for (int k = 0; k < Game.Board_w; k++)
+            {
+                var p = GetPosition(k,i);
+                <BlazorUI.Comps.Cell Ball="@Game.GetCell(k,i)" Position="p" OnClickCallback="OnSelectCell" />
+            }
+        }
+    </div>
+ </div>
+
+ 
