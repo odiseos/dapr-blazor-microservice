@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\BlazorUI"
   ],
-  "SelectedNode": "\\C:\\Users\\emyode\\OneDrive\\Documents\\Lunch&Learn",
   "PreviewInSolutionExplorer": false
 }
