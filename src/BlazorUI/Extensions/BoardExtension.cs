@@ -1,6 +1,6 @@
-using BlazorUI.Engine;
+using BlazorUI.Engines;
 
-namespace BlazorUI.Extension;
+namespace BlazorUI.Extensions;
 
 public static class BoardExtension
 {

@@ -1,0 +1,65 @@
+version: '3.4'
+
+services:
+  redis:
+    image: redis:alpine
+
+  seq:
+    image: datalust/seq:latest
+
+  sqldata:
+    image: mcr.microsoft.com/mssql/server:2017-latest 
+    
+  zipkin:
+    image: openzipkin/zipkin-slim
+
+  blazor-ui:
+    image: ${REGISTRY:-fiveinline}/blazor.ui:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/BlazorUI/Dockerfile
+
+  game-api:
+    image: ${REGISTRY:-fiveinline}/game.api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Game.API/Dockerfile
+    depends_on:
+      - redis
+      - sqldata
+
+  game-api-dapr:
+    image: "daprio/daprd:1.5.1"
+    network_mode: "service:game-api"
+    depends_on:
+      - game-api
+
+  user-api:
+    image: ${REGISTRY:-fiveinline}/user.api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/User.API/Dockerfile
+    depends_on:
+      - redis
+      - sqldata
+
+  user-api-dapr:
+    image: "daprio/daprd:1.5.1"
+    network_mode: "service:user-api"
+    depends_on:
+      - user-api
+
+  webfiveinline-apigw:
+    image: envoyproxy/envoy:v1.14.2
+
+  webfiveinline-apigw-dapr:
+    image: "daprio/daprd:1.5.1"
+    network_mode: "service:webfiveinline-apigw"
+    depends_on:
+      - webfiveinline-apigw
+
+  webstatus:
+    image: xabarilcoding/healthchecksui:5.0.0
+
+  dapr-placement:
+    image: "daprio/dapr:1.5.1"

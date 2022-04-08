@@ -1,0 +1,48 @@
+﻿@page "/users"
+
+
+@using BlazorUI.Clients;
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+
+@inject UserClient _userClient
+
+<PageTitle>Users</PageTitle>
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>User name</th>
+  </tr>
+  @foreach(var item in Users)
+   {
+      <tr>
+        <td>@item.Id</td>
+        <td>@item.UserName</td>
+      </tr>    
+   }
+</table>
+
+
+@code{
+     public IEnumerable<BlazorUI.Clients.User> Users { get; set; } = new List<BlazorUI.Clients.User>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadGamesAsync();
+    }
+
+    private async Task LoadGamesAsync()
+    {
+        try
+        {
+            Users = await _userClient.GetAsync();
+        }
+        catch (Exception ex)
+        {
+            
+        }
+    }
+
+}

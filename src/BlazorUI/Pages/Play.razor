@@ -1,10 +1,18 @@
 @page "/play"
 
+@using BlazorUI.Clients;
+@inject GameClient _gameClient
+
 <PageTitle>5 in line</PageTitle>
 
 <h1>5 in line</h1>
 
-
+<div>
+<label style="margin: 10px; font-weight: bold; font-size: 30px;"> 
+  User Name:
+  <input style="font-size: 20px;" type="text" name="username" @bind="UserName" />
+</label>
+</div>
 
 <div class="board_next">
     <div class="grid_next">

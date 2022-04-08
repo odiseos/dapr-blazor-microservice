@@ -9,8 +9,8 @@
   
   .grid {
     display: grid;
-    grid-template-columns: repeat(9, 80px);
-    grid-template-rows: repeat(9, 80px);
+    grid-template-columns: repeat(9, 70px);
+    grid-template-rows: repeat(9, 70px);
     grid-gap: 5px;
   }
 
@@ -22,7 +22,7 @@
 
   .grid_next {
     display: grid;
-    grid-template-columns: repeat(3, 80px);
-    grid-template-rows: repeat(1, 80px);
+    grid-template-columns: repeat(5, 70px);
+    grid-template-rows: repeat(1, 70px);
     grid-gap: 5px;
   }

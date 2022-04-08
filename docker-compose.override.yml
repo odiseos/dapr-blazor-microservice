@@ -1,0 +1,131 @@
+version: '3.4'
+
+# The default docker-compose.override file can use the "localhost" as the external name for testing web apps within the same dev machine.
+# The FIVEINLINE_EXTERNAL_DNS_NAME_OR_IP environment variable is taken, by default, from the ".env" file defined like:
+#     FIVEINLINE_EXTERNAL_DNS_NAME_OR_IP=localhost
+# but values present in the environment vars at runtime will always override those defined inside the .env file
+
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6380:6379"
+
+  seq:
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5340:80"
+
+  sqldata:
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "5433:1433"
+    volumes:
+      - fiveinline-sqldata:/var/opt/mssql
+
+  zipkin:
+    ports:
+      - "5411:9411"
+
+  blazor-ui:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ApiGatewayUrlExternal=http://${FIVEINLINE_EXTERNAL_DNS_NAME_OR_IP}:5202
+      - SeqServerUrl=http://seq
+    ports:
+      - "5104:80"
+
+  game-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - RetryMigrations=true
+      - SeqServerUrl=http://seq
+      # Temporarily while waiting for https://github.com/dapr/dotnet-sdk/issues/779 to get fixed.
+      - ConnectionStrings__GameDB=Server=sqldata;Database=GameDb;User Id=sa;Password=Pass@word;TrustServerCertificate=true
+    ports:
+      - "5101:80"
+      - "50002:50001"
+
+  game-api-dapr:
+    command: ["./daprd",
+      "-app-id", "game-api",
+      "-app-port", "80",
+      "-log-level", "debug",
+      "-placement-host-address", "dapr-placement:50000",
+      "-components-path", "/components",
+      "-config", "/configuration/fiveinline-config.yaml"
+      ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
+  
+  user-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - RetryMigrations=true
+      - SeqServerUrl=http://seq
+      # Temporarily while waiting for https://github.com/dapr/dotnet-sdk/issues/779 to get fixed.
+      - ConnectionStrings__UserDB=Server=sqldata;Database=UserDb;User Id=sa;Password=Pass@word;TrustServerCertificate=true
+    ports:
+      - "5102:80"
+      - "50003:50001"
+
+  user-api-dapr:
+    command: ["./daprd",
+      "-app-id", "user-api",
+      "-app-port", "80",
+      "-log-level", "debug",
+      "-placement-host-address", "dapr-placement:50000",
+      "-components-path", "/components",
+      "-config", "/configuration/fiveinline-config.yaml"
+      ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
+
+  webfiveinline-apigw:
+    volumes:
+      - ./src/Envoy:/etc/envoy
+    ports:
+    - "5202:80"
+    - "15202:8001"
+    - "50008:50001"
+
+  webfiveinline-apigw-dapr:
+    command: ["./daprd",
+      "-app-id", "webfiveinline-apigw",
+      "-app-port", "80",
+      "-components-path", "/components",
+      "-config", "/configuration/fiveinline-config.yaml"
+      ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
+
+  webstatus:
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - HealthChecksUI__HealthChecks__0__Name=Game API
+      - HealthChecksUI__HealthChecks__0__Uri=http://game-api/hc
+      - HealthChecksUI__HealthChecks__1__Name=User API
+      - HealthChecksUI__HealthChecks__1__Uri=http://user-api/hc
+    ports:
+      - "5107:80"
+
+  dapr-placement:
+    command: ["./placement", "-port", "50000", "-log-level", "debug"]
+    ports:
+      - "50000:50000"
+
+volumes:
+  fiveinline-sqldata:
+    external: false
+  fiveinline-nosqldata:
+    external: false
+

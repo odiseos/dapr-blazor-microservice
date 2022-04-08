@@ -1,0 +1,50 @@
+﻿@page "/games"
+
+
+@using BlazorUI.Clients;
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+
+@inject GameClient _gameClient
+
+<PageTitle>Games</PageTitle>
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>User name</th>
+    <th>Points</th>
+  </tr>
+  @foreach(var item in PlayedGames)
+   {
+      <tr>
+        <td>@item.Id</td>
+        <td>@item.UserName</td>
+        <td>@item.Points</td>
+      </tr>    
+   }
+</table>
+
+
+@code{
+     public IEnumerable<PlayedGame> PlayedGames { get; set; } = new List<PlayedGame>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadGamesAsync();
+    }
+
+    private async Task LoadGamesAsync()
+    {
+        try
+        {
+            PlayedGames = await _gameClient.GetAsync();
+        }
+        catch (Exception ex)
+        {
+            
+        }
+    }
+
+}

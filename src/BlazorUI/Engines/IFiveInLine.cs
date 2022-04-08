@@ -1,5 +1,4 @@
-
-namespace BlazorUI.Engine;
+namespace BlazorUI.Engines;
 
 public interface IFiveInLine
 {

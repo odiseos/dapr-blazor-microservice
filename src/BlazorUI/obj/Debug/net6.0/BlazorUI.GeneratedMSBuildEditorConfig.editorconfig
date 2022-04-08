@@ -39,9 +39,17 @@ build_metadata.AdditionalFiles.CssScope = b-nxcvqqah5n
 build_metadata.AdditionalFiles.TargetPath = Q29tcHNcQ2VsbE5leHRCYWxsLnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-ugxlrv3mv7
 
+[C:/Users/emyode/OneDrive/Documents/Lunch&Learn/src/BlazorUI/Pages/Game.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcR2FtZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-cuzi0srtg7
+
 [C:/Users/emyode/OneDrive/Documents/Lunch&Learn/src/BlazorUI/Pages/Play.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGxheS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-3ed1vlqbmd
+
+[C:/Users/emyode/OneDrive/Documents/Lunch&Learn/src/BlazorUI/Pages/User.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-y6btb2a16w
 
 [C:/Users/emyode/OneDrive/Documents/Lunch&Learn/src/BlazorUI/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
